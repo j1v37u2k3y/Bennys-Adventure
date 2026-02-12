@@ -16,6 +16,10 @@ A pixel art platformer game built with vanilla JavaScript and HTML5 Canvas.
 ### Goal
 Collect all gems in each level to complete it. Levels unlock sequentially - beat one to unlock the next.
 
+You have **5 hearts** - falling off the screen costs one heart and resets all gems. Lose all hearts and it's game over!
+
+A **speedrun timer** tracks your completion time. When you finish a level with a top-5 time, you'll enter 3-character arcade-style initials for the **leaderboard**. The top entry for each level is shown on the level select screen. Try to climb the ranks!
+
 ## Running the Game
 
 ### Prerequisites
@@ -75,7 +79,7 @@ js/
     rendering/              Canvas drawing (Renderer, sprites, particles)
     systems/                Input, Physics, Camera
     levels/                 Level definitions (tile grids)
-    states/                 Game screens (Menu, Play, LevelComplete)
+    states/                 Game screens (Menu, Play, LevelComplete, GameOver)
 ```
 
 ## Technical Details
@@ -84,4 +88,4 @@ js/
 - **Native resolution**: 480x320, displayed at 2x (960x640) with CSS `image-rendering: pixelated`
 - **Pixel art sprites**: Defined inline as character grids, drawn pixel-by-pixel to canvas
 - **Physics**: AABB collision with separated-axis resolution
-- **Save data**: Stored in `localStorage` under the key `bennys_adventure_save`
+- **Save data**: Stored in `localStorage` under the key `bennys_adventure_save` (level progress + per-level leaderboards)

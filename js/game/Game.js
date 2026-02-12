@@ -6,6 +6,7 @@ import MenuState from './states/MenuState.js';
 import PlayState from './states/PlayState.js';
 import LevelCompleteState from './states/LevelCompleteState.js';
 import GameOverState from './states/GameOverState.js';
+import PreLevelState from './states/PreLevelState.js';
 import { LEVELS } from './levels/levelData.js';
 
 export default class Game {
@@ -53,6 +54,10 @@ export default class Game {
     this.currentState = new MenuState(this);
   }
 
+  showPreLevel(levelIndex) {
+    this.currentState = new PreLevelState(this, levelIndex);
+  }
+
   startLevel(levelIndex) {
     this.currentState = new PlayState(this, levelIndex);
   }
@@ -61,9 +66,14 @@ export default class Game {
     this.currentState = new GameOverState(this, levelIndex);
   }
 
-  completeLevel(levelIndex) {
+  completeLevel(levelIndex, time) {
     this.saveManager.completeLevel(levelIndex);
-    this.currentState = new LevelCompleteState(this, levelIndex);
+    const qualifies = this.saveManager.qualifiesForLeaderboard(levelIndex, time);
+    this.currentState = new LevelCompleteState(this, levelIndex, time, qualifies);
+  }
+
+  saveLeaderboardEntry(levelIndex, initials, time) {
+    return this.saveManager.addLeaderboardEntry(levelIndex, initials, time);
   }
 
   getLevelData(index) {

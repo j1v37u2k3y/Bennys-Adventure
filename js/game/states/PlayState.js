@@ -1,6 +1,7 @@
 import {
   CANVAS_WIDTH, CANVAS_HEIGHT, TILE,
-  RESPAWN_Y_THRESHOLD, PLAYER_MAX_LIVES, UI_WHITE, UI_GOLD, GEM_BLUE
+  RESPAWN_Y_THRESHOLD, PLAYER_MAX_LIVES, UI_WHITE, UI_GOLD, GEM_BLUE,
+  formatTime
 } from '../data/constants.js';
 import Player from '../entities/Player.js';
 import Gem from '../entities/Gem.js';
@@ -39,6 +40,10 @@ export default class PlayState {
 
     // Particles
     this.particles = new ParticleSystem();
+
+    // Timer
+    this.startTime = performance.now();
+    this.elapsedTime = 0;
   }
 
   update(input) {
@@ -47,6 +52,9 @@ export default class PlayState {
       this.game.goToMenu();
       return;
     }
+
+    // Update timer
+    this.elapsedTime = (performance.now() - this.startTime) / 1000;
 
     // Update player
     this.player.update(input, this.collisionRects);
@@ -63,7 +71,7 @@ export default class PlayState {
 
         // Check level complete
         if (this.gemsCollected >= this.totalGems) {
-          this.game.completeLevel(this.levelIndex);
+          this.game.completeLevel(this.levelIndex, this.elapsedTime);
           return;
         }
       }
@@ -132,6 +140,12 @@ export default class PlayState {
     renderer.drawTextWithShadow(
       this.levelData.name,
       CANVAS_WIDTH / 2, hudY + 1, UI_GOLD, 8, 'center'
+    );
+
+    // Timer - below level name
+    renderer.drawTextWithShadow(
+      formatTime(this.elapsedTime),
+      CANVAS_WIDTH / 2, hudY + 12, UI_WHITE, 8, 'center'
     );
 
     // Hearts - top right

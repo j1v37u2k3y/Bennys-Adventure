@@ -1,6 +1,7 @@
 import {
   CANVAS_WIDTH, CANVAS_HEIGHT, TOTAL_LEVELS,
-  UI_WHITE, UI_GOLD, UI_GREEN, UI_GRAY, UI_DARK_GRAY, UI_LOCKED, UI_BLACK
+  UI_WHITE, UI_GOLD, UI_GREEN, UI_GRAY, UI_DARK_GRAY, UI_LOCKED, UI_BLACK,
+  formatTime
 } from '../data/constants.js';
 import { drawSprite } from '../rendering/PixelSprites.js';
 
@@ -37,7 +38,7 @@ export default class MenuState {
     // Select level
     if (input.wasPressed(' ') || input.wasPressed('Enter')) {
       if (this.game.saveManager.isUnlocked(this.selectedIndex)) {
-        this.game.startLevel(this.selectedIndex);
+        this.game.showPreLevel(this.selectedIndex);
       }
     }
   }
@@ -85,11 +86,23 @@ export default class MenuState {
         drawSprite(ctx, 'lock', bx + BOX_W / 2 - 4, by + 28);
       }
 
-      // Level name (below box)
+      // Top leaderboard entry (below box for completed levels)
+      if (completed) {
+        const board = this.game.saveManager.getLeaderboard(i);
+        if (board.length > 0) {
+          const top = board[0];
+          renderer.drawText(
+            `${top.initials} ${formatTime(top.time)}`,
+            bx + BOX_W / 2, by + BOX_H + 4, UI_GRAY, 6, 'center'
+          );
+        }
+      }
+
+      // Level name (below boxes)
       if (selected && unlocked) {
         const levelData = this.game.getLevelData(i);
         if (levelData) {
-          renderer.drawTextWithShadow(levelData.name, CANVAS_WIDTH / 2, GRID_Y + BOX_H + 14, UI_WHITE, 8, 'center');
+          renderer.drawTextWithShadow(levelData.name, CANVAS_WIDTH / 2, GRID_Y + BOX_H + 18, UI_WHITE, 8, 'center');
         }
       }
     }

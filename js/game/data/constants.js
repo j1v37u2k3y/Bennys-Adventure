@@ -62,8 +62,20 @@ export const STATE_LEVEL_COMPLETE = 'levelComplete';
 // Level count
 export const TOTAL_LEVELS = 5;
 
+// Leaderboard
+export const LEADERBOARD_SIZE = 5;
+
 // Lives
 export const PLAYER_MAX_LIVES = 5;
 
 // Respawn
 export const RESPAWN_Y_THRESHOLD = 50; // pixels below canvas bottom to trigger respawn
+
+// Time formatting helper
+export function formatTime(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  const whole = Math.floor(secs);
+  const centis = Math.floor((secs - whole) * 100);
+  return `${mins}:${String(whole).padStart(2, '0')}.${String(centis).padStart(2, '0')}`;
+}

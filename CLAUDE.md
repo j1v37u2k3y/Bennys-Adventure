@@ -15,7 +15,7 @@ A pixel art platformer game built with vanilla JavaScript and HTML5 Canvas. No g
 `index.html` → `js/app.js` → `js/game/Game.js`
 
 ### Game Loop
-`Game.js` runs a `requestAnimationFrame` loop. The game uses a **state pattern** - `currentState` is swapped between `MenuState`, `PlayState`, and `LevelCompleteState`. Each state has `update(input)` and `render(renderer)` methods.
+`Game.js` runs a `requestAnimationFrame` loop. The game uses a **state pattern** - `currentState` is swapped between `MenuState`, `PreLevelState`, `PlayState`, `LevelCompleteState`, and `GameOverState`. Each state has `update(input)` and `render(renderer)` methods.
 
 ### Directory Layout
 ```
@@ -41,9 +41,11 @@ js/
     levels/
       levelData.js                # 5 levels as text grids (# = solid, . = empty)
     states/
-      MenuState.js                # Level select screen
-      PlayState.js                # Gameplay (player, gems, platforms, camera)
-      LevelCompleteState.js       # Victory screen with next level option
+      PreLevelState.js             # Pre-level leaderboard screen
+      MenuState.js                # Level select screen (shows top leaderboard entry)
+      PlayState.js                # Gameplay (player, gems, platforms, camera, timer)
+      LevelCompleteState.js       # Victory screen with initials entry + leaderboard
+      GameOverState.js            # Game over screen (retry or return to menu)
 ```
 
 ### Key Conventions
@@ -53,6 +55,8 @@ js/
 - **Collision**: Separated-axis AABB resolution in `Physics.js` (X then Y).
 - **All constants** (gravity, speed, jump force, colors, canvas size) live in `data/constants.js`. Tune gameplay by editing values there.
 - **No delta time** - the game loop runs at requestAnimationFrame rate without frame-independent timing.
+- **Lives**: Player starts with 5 hearts (`PLAYER_MAX_LIVES`). Falling off screen costs a life, resets gems, and respawns the player. Losing all lives triggers `GameOverState`.
+- **Timer & Leaderboard**: `PlayState` tracks elapsed time via `performance.now()`. On level complete, players enter 3-character arcade-style initials if they qualify for the top-5 leaderboard. `SaveManager` stores a sorted leaderboard per level (up to `LEADERBOARD_SIZE` entries, each with `{initials, time}`). The leaderboard displays on the level complete screen and the #1 entry shows on the level select menu.
 
 ### Adding a New Level
 1. Add a level object in `js/game/levels/levelData.js` following the existing format
