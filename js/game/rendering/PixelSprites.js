@@ -32,6 +32,16 @@ const PALETTES = {
     'L': UI_LOCKED,
     'D': '#444444',
     'K': '#888888',
+  },
+  heart: {
+    'R': '#e03030',
+    'D': '#a01020',
+    'W': '#ff6060',
+  },
+  heartEmpty: {
+    'R': '#444444',
+    'D': '#333333',
+    'W': '#555555',
   }
 };
 
@@ -152,6 +162,17 @@ const LOCK_SPRITE = [
   'LLLLLLLL',
 ];
 
+// Heart sprite (7x7)
+const HEART_SPRITE = [
+  '.RR.RR.',
+  'RWRRWRR',
+  'RRRRRRR',
+  'RRRRRRR',
+  '.RRRRR.',
+  '..RRR..',
+  '...R...',
+];
+
 export const SPRITES = {
   playerIdle: { data: PLAYER_IDLE, palette: 'player', w: 12, h: 16 },
   playerRun1: { data: PLAYER_RUN1, palette: 'player', w: 12, h: 16 },
@@ -160,6 +181,8 @@ export const SPRITES = {
   gem: { data: GEM_SPRITE, palette: 'gem', w: 10, h: 10 },
   star: { data: STAR_SPRITE, palette: 'star', w: 7, h: 7 },
   lock: { data: LOCK_SPRITE, palette: 'lock', w: 8, h: 8 },
+  heart: { data: HEART_SPRITE, palette: 'heart', w: 7, h: 7 },
+  heartEmpty: { data: HEART_SPRITE, palette: 'heartEmpty', w: 7, h: 7 },
 };
 
 /**

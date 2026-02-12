@@ -62,5 +62,8 @@ export const STATE_LEVEL_COMPLETE = 'levelComplete';
 // Level count
 export const TOTAL_LEVELS = 5;
 
+// Lives
+export const PLAYER_MAX_LIVES = 5;
+
 // Respawn
 export const RESPAWN_Y_THRESHOLD = 50; // pixels below canvas bottom to trigger respawn

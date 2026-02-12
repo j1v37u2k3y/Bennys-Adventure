@@ -1,6 +1,6 @@
 import {
   CANVAS_WIDTH, CANVAS_HEIGHT, TILE,
-  RESPAWN_Y_THRESHOLD, UI_WHITE, UI_GOLD, GEM_BLUE
+  RESPAWN_Y_THRESHOLD, PLAYER_MAX_LIVES, UI_WHITE, UI_GOLD, GEM_BLUE
 } from '../data/constants.js';
 import Player from '../entities/Player.js';
 import Gem from '../entities/Gem.js';
@@ -30,6 +30,9 @@ export default class PlayState {
     this.gems = this.levelData.gems.map(g => new Gem(g.x, g.y));
     this.gemsCollected = 0;
     this.totalGems = this.gems.length;
+
+    // Lives
+    this.lives = PLAYER_MAX_LIVES;
 
     // Camera
     this.camera = new Camera();
@@ -74,6 +77,20 @@ export default class PlayState {
 
     // Fall off screen respawn
     if (this.player.y > this.levelHeight * TILE + RESPAWN_Y_THRESHOLD) {
+      this.lives--;
+
+      // Reset all gems
+      for (const gem of this.gems) {
+        gem.collected = false;
+      }
+      this.gemsCollected = 0;
+
+      // Game over if out of lives
+      if (this.lives <= 0) {
+        this.game.gameOver(this.levelIndex);
+        return;
+      }
+
       this.player.respawn();
       this.camera.reset();
     }
@@ -117,9 +134,12 @@ export default class PlayState {
       CANVAS_WIDTH / 2, hudY + 1, UI_GOLD, 8, 'center'
     );
 
-    // ESC hint - top right
-    renderer.drawTextWithShadow(
-      'ESC: Menu', CANVAS_WIDTH - 6, hudY + 1, '#888888', 7, 'right'
-    );
+    // Hearts - top right
+    const heartSpacing = 10;
+    const heartStartX = CANVAS_WIDTH - 6 - (PLAYER_MAX_LIVES * heartSpacing);
+    for (let i = 0; i < PLAYER_MAX_LIVES; i++) {
+      const spriteName = i < this.lives ? 'heart' : 'heartEmpty';
+      drawSprite(renderer.ctx, spriteName, heartStartX + i * heartSpacing, hudY);
+    }
   }
 }

@@ -5,6 +5,7 @@ import SaveManager from './data/SaveManager.js';
 import MenuState from './states/MenuState.js';
 import PlayState from './states/PlayState.js';
 import LevelCompleteState from './states/LevelCompleteState.js';
+import GameOverState from './states/GameOverState.js';
 import { LEVELS } from './levels/levelData.js';
 
 export default class Game {
@@ -54,6 +55,10 @@ export default class Game {
 
   startLevel(levelIndex) {
     this.currentState = new PlayState(this, levelIndex);
+  }
+
+  gameOver(levelIndex) {
+    this.currentState = new GameOverState(this, levelIndex);
   }
 
   completeLevel(levelIndex) {
